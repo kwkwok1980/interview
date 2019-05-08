@@ -45,8 +45,8 @@ void Solve(const std::string& input)
 
 int main()
 {
-    const char* inputs[] = {"D", "I", "DD", "II", "DIDI", "IIDDD", "DDIDDIID"};
-    for(const char* input : inputs)
+    std::string inputs[] = {"D", "I", "DD", "II", "DIDI", "IIDDD", "DDIDDIID"};
+    for(const std::string& input : inputs)
     {
         Solve(input);
     }
