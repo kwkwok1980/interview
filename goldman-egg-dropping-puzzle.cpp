@@ -8,6 +8,7 @@ int count = 0;
 
 const int MAX_N = 10 + 1;
 const int MAX_K = 100 + 1;
+const int MAX_INT = 2147483647;
 int results[MAX_N][MAX_K];
 
 void ResetResults()
@@ -47,7 +48,7 @@ int Solve(int N, int K)
     }
 
     //int result = std::numeric_limits<int>::max();
-    int result = 2147483647;
+    int result = MAX_INT;
     for (int x=1; x<=K; ++x)
     {
         result = std::min(result, 1+ std::max(Solve(N,K-x), Solve(N-1, x-1)));
