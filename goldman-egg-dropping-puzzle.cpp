@@ -7,7 +7,7 @@
 int count = 0;
 
 const int MAX_N = 10 + 1;
-const int MAX_K = 50 + 1;
+const int MAX_K = 100 + 1;
 int results[MAX_N][MAX_K];
 
 void ResetResults()
