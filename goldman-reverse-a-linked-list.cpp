@@ -33,20 +33,26 @@ Node* reverse2(Node* node)
         nodes.push(node);
         node = node->next;
     }
-    
-    node = nodes.top();
-    nodes.pop();
-    node->next = nullptr;
-    Node* head = node;    
-    
+
+    Node* head = nullptr;
     while(!nodes.empty())
     {
         Node* next = nodes.top();
         nodes.pop();
         next->next = nullptr;
-        
-        node->next = next;
-        node = next;
+
+        if (head == nullptr)
+        {
+            node = next;
+            head = next;
+        }
+        else
+        {
+            node->next = next;
+            node = next;
+       }
     }
+
     return head;
 }
+
