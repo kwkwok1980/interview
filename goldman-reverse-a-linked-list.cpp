@@ -24,3 +24,29 @@ Node* reverse(Node* node) {
         return node;
     }
 }
+
+Node* reverse2(Node* node)
+{
+    std::stack<Node*> nodes{};
+    while(node != nullptr)
+    {
+        nodes.push(node);
+        node = node->next;
+    }
+    
+    node = nodes.top();
+    nodes.pop();
+    node->next = nullptr;
+    Node* head = node;    
+    
+    while(!nodes.empty())
+    {
+        Node* next = nodes.top();
+        nodes.pop();
+        next->next = nullptr;
+        
+        node->next = next;
+        node = next;
+    }
+    return head;
+}
