@@ -7,14 +7,11 @@
 
 void Solve(const std::vector<std::int64_t>& values)
 {
-    std::priority_queue<std::int64_t, std::vector<std::int64_t>, std::greater<std::int64_t>> queues{};
-    for(auto value : values)
-    {
-        queues.push(value);
-    }
-    
+    using queue_type = std::priority_queue<std::int64_t, std::vector<std::int64_t>, std::greater<std::int64_t>>;
+    queue_type queues{values.begin(), values.end()};
+
     std::int64_t cost = 0;
-    while(true)
+    while(queues.size() > 1)
     {
         std::int64_t min1 = queues.top();
         queues.pop();
@@ -25,15 +22,7 @@ void Solve(const std::vector<std::int64_t>& values)
         std::int64_t min3 = min1 + min2;
         //std::cout << min1 << " " << min2 << " " << min3 << std::endl;
         cost += min3;
-
-        if (queues.empty())
-        {
-            break;
-        }
-        else
-        {
-            queues.push(min3);
-        }
+        queues.push(min3);
     }
 
     std::cout << cost << std::endl;
