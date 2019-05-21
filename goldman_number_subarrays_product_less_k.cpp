@@ -2,18 +2,19 @@
 
 #include <iostream>
 #include <array>
+#include <vector>
 
-int Solve(const int* values, int N, int K)
+std::int64_t Solve(const std::vector<std::int64_t>& values, std::int64_t N, std::int64_t K)
 {
-    int result = 1;
-    int count = 0;
-    int n = 0;
+    std::int64_t result = 1;
+    std::int64_t count = 0;
+    std::int64_t n = 0;
 
-    for (int i=0; i<N; ++i)
+    for (std::int64_t i=0; i<N; ++i)
     {
-        for (int j=n; j<N; ++j)
+        for (std::int64_t j=n; j<N; ++j)
         {
-            if (result * values[j] > K)
+            if (result * values[j] >= K)
             {
                 break;
             }
@@ -26,6 +27,7 @@ int Solve(const int* values, int N, int K)
         {
             count += (n-i);
             result = result / values[i];
+            //std::cout << n << " " << i << std::endl;
         }
         else
         {
@@ -40,18 +42,36 @@ int Solve(const int* values, int N, int K)
 
 int main()
 {
+    /*
     {
-        std::array<int, 4> values {1, 2, 3, 4};
-        int K = 10;
-        int result = Solve(values.data(), values.size(), K);
+        std::array<std::int64_t, 4> values {1, 2, 3, 4};
+        std::int64_t K = 10;
+        std::int64_t result = Solve(values.data(), values.size(), K);
         std::cout << result << std::endl;
     }
 
     {
-        std::array<int, 7> values {1, 9, 2, 8, 6, 4, 3};
-        int K = 100;
-        int result = Solve(values.data(), values.size(), K);
+        std::array<std::int64_t, 7> values {1, 9, 2, 8, 6, 4, 3};
+        std::int64_t K = 100;
+        std::int64_t result = Solve(values.data(), values.size(), K);
         std::cout << result << std::endl;
+    }
+     */
+
+    std::int64_t T, N, K;
+    std::cin >> T;
+    for (std::int64_t t=0; t<T; ++t)
+    {
+        std::cin >> N;
+        std::cin >> K;
+        std::vector<std::int64_t> values{};
+        for (std::int64_t n=0; n<N; ++n)
+        {
+            std::int64_t value;
+            std::cin >> value;
+            values.push_back(value);
+        }
+        std::cout << Solve(values, N, K) << std::endl;
     }
 
     return 0;
