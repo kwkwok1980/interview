@@ -1,4 +1,4 @@
-https://practice.geeksforgeeks.org/problems/implement-atoi/1
+//https://practice.geeksforgeeks.org/problems/implement-atoi/1
 
 {
  #include <bits/stdc++.h>
