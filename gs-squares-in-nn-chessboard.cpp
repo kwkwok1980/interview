@@ -4,7 +4,6 @@
 void Solve(int N)
 {
     std::int64_t count=0;
-    std::int64_t prev=0;
     
     if (N==1)
     {
@@ -12,16 +11,14 @@ void Solve(int N)
         return;
     }
     
-    prev = 1;
+    count = 1;
     for (int n=2; n<=N; ++n)
     {
-        count = prev;
         for (int m=1; m<=n; ++m)
         {
             count += 2*m;
         }
         count -= n;
-        prev = count;
     }
     
     std::cout << count << std::endl;
