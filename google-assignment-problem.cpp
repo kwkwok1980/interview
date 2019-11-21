@@ -8,12 +8,13 @@
 #include <bitset>
 
 constexpr std::size_t MAX = 30;
-using Jobs = std::uint64_t[MAX][MAX];
-using Status = std::uint64_t;
-using Result = std::unordered_map<Status, std::uint64_t>[MAX];
+using Jobs = std::uint32_t[MAX][MAX];
+using Status = std::uint32_t;
+using Result = std::unordered_map<Status, std::uint32_t>[MAX];
 
-std::uint64_t SolveInternal(std::size_t N, Jobs& jobs, std::size_t n, Status status, Result& result)
+std::uint32_t SolveInternal(std::size_t N, Jobs& jobs, std::size_t n, Status status, Result& result)
 {
+    std::cout << status << std::endl;
     if (n >= N)
     {
         return 0;
@@ -24,15 +25,15 @@ std::uint64_t SolveInternal(std::size_t N, Jobs& jobs, std::size_t n, Status sta
         return result[n][status];
     }
 
-    std::uint64_t minValue = std::numeric_limits<std::uint64_t>::max();
+    std::uint32_t minValue = std::numeric_limits<std::uint32_t>::max();
     for (std::size_t i=0; i<N; ++i)
     {
-        std::uint64_t newStatus = 1;
+        std::uint32_t newStatus = 1;
         newStatus = newStatus << i;
 
         if ((status & newStatus) == 0)
         {
-            std::uint64_t newValue =  SolveInternal(N, jobs, n+1, status | newStatus, result);
+            std::uint32_t newValue =  SolveInternal(N, jobs, n+1, status | newStatus, result);
             if (newValue != 0)
             {
                 newValue = newValue + jobs[n][i];
@@ -52,7 +53,7 @@ void Solve(std::size_t N, Jobs& jobs)
 {
     Status status{};
     Result result{};
-    std::uint64_t minValue = SolveInternal(N, jobs, 0, status, result);
+    std::uint32_t minValue = SolveInternal(N, jobs, 0, status, result);
     std::cout << minValue << std::endl;
 }
 
