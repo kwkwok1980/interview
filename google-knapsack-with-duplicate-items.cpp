@@ -28,10 +28,7 @@ int SolveInternal(int N, int W)
 
 void Solve(int N, int W)
 {
-    for (int& result : results)
-    {
-        result = -1;
-    }
+    std::fill(results, results + max, -1);
 
     for (int n=0; n<N; ++n)
     {
