@@ -32,9 +32,18 @@ int eggDropInternal(const int N, const int K)
     int result = std::numeric_limits<int>::max();
     for (int k=1; k<=K; ++k)
     {
-        int result1 = 1 + eggDropInternal(N-1, k-1);
-        int result2 = 1 + eggDropInternal(N, K-k);
-        result = std::min(result, std::max(result1, result2));
+        if (k == 1)
+        {
+            result = std::min(result, 1 + eggDropInternal(N, K-k));
+        }
+        else if (k == K)
+        {
+            result = std::min(result, 1 + eggDropInternal(N-1, k-1));
+        }
+        else
+        {
+            result = std::min(result, 1 + std::max(eggDropInternal(N, K-k), eggDropInternal(N-1, k-1)));
+        }
     }
 
     results[N][K] = result;
@@ -57,4 +66,5 @@ int main()
 {
     std::cout << eggDrop(2, 10) << std::endl;
     std::cout << eggDrop(3, 5) << std::endl;
+    std::cout << eggDrop(3, 2) << std::endl;
 }
