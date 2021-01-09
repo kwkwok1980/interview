@@ -1,7 +1,5 @@
 //https://www.geeksforgeeks.org/form-minimum-number-from-given-sequence/
 
-//https://practice.geeksforgeeks.org/problems/egg-dropping-puzzle-1587115620/1
-
 #include <iostream>
 #include <vector>
 #include <algorithm>
