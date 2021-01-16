@@ -1,4 +1,4 @@
-//https://practice.geeksforgeeks.org/problems/knight-walk/0#
+//https://practice.geeksforgeeks.org/problems/number-following-a-pattern/0
 
 #include <iostream>
 #include <vector>
