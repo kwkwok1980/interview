@@ -29,6 +29,18 @@ void Solve(int N)
     std::cout << count * 2 << std::endl;
 }
 
+long long rectanglesInChessBoard(long long N) {
+    long long rectangleCount = 0;
+    long long squareCount = 0;
+    for (long long i=1; i<=N; ++i)
+    {
+        rectangleCount = rectangleCount + (N-i+1);
+        squareCount = squareCount + (N-i+1) * (N-i+1);
+    }
+    rectangleCount = rectangleCount * rectangleCount;
+    return rectangleCount - squareCount;
+}
+
 int main() {
     int T = 0;
     int N = 0;
