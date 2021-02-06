@@ -114,3 +114,26 @@ struct node *reverse (struct node *head, int k)
     head->next = reverse(current, k);
     return prev;
 }
+
+struct node *reverse2 (struct node *head, int k)
+{
+    if (head == nullptr)
+    {
+        return nullptr;
+    }
+    
+    node* A = nullptr;
+    node* B = head;
+    node* C = nullptr;
+    for (int i=0; i<k; ++i)
+    {
+        C = B->next;
+        B->next = A;
+        A = B;
+        B = C;
+    }
+    head->next = reverse2(B, k);
+    return A;
+    
+    // Complete this method
+}
