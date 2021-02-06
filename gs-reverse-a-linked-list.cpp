@@ -9,20 +9,36 @@ struct Node {
     Node* next;
 };
 
-Node* reverse(Node* node) {
-    Node* next = node->next;
-    if (next != nullptr)
+struct Node* reverseList1(struct Node *head)
+{
+    Node* A = nullptr;
+    Node* B = head;
+    Node* C = nullptr;
+    
+    while (B != nullptr)
     {
-        Node* head = reverse(next);
-        next->next = node;
-        node->next = nullptr;
+        C = B->next;
+        B->next = A;
+        A = B;
+        B = C;
+    }
+    return A;
+}
+
+struct Node* reverseList2(struct Node *head)
+{
+    if (head->next == nullptr)
+    {
         return head;
     }
-    else
-    {
-        node->next = nullptr;
-        return node;
-    }
+    
+    Node* A = head;
+    Node* B = head->next;
+    
+    head = reverseList2(B);
+    B->next = A;
+    A->next = nullptr;
+    return head;
 }
 
 Node* reverse2(Node* node)
