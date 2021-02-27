@@ -16,14 +16,12 @@
 #include <thread>
 #include <condition_variable>
 #include <chrono>
-#include <c++/8/sstream>
-#include <ranges>
 
 void Solve(const std::string& value, int K)
 {
     int begin = 0;
     int end = 0;
-    int result = 0;
+    int result = -1;
     std::unordered_map<char, int> cache{};
 
     for (char c : value)
@@ -41,7 +39,11 @@ void Solve(const std::string& value, int K)
             }
             ++begin;
         }
-        result = std::max(result, end - begin);
+        
+        if (cache.size() == K)
+        {
+            result = std::max(result, end - begin);    
+        }
     }
 
     std::cout << result << std::endl;
