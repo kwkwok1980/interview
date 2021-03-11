@@ -1,28 +1,17 @@
 //https://practice.geeksforgeeks.org/problems/squares-in-nn-chessboard/0
 #include <iostream>
 
-void Solve(int N)
-{
-    std::int64_t count=0;
-    
-    if (N==1)
-    {
-        std::cout << 1 << std::endl;
-        return;
-    }
-    
-    count = 1;
-    for (int n=2; n<=N; ++n)
-    {
-        for (int m=1; m<=n; ++m)
+class Solution {
+  public:
+    long long squaresInChessBoard(long long N) {
+        long long count = 0;
+        for (int i=1; i<=N; ++i)
         {
-            count += 2*m;
+            count = count + (N-i+1) * (N-i+1);
         }
-        count -= n;
+        return count;
     }
-    
-    std::cout << count << std::endl;
-}
+};
 
 int main() {
 	int T=0;
@@ -31,7 +20,8 @@ int main() {
 	for (int t=0; t<T; ++t)
 	{
 	    std::cin >> N;
-	    Solve(N);
+	    Solution solution{};
+	    std::cout << solution.squaresInChessBoard(N) << std::endl;
 	}
 	return 0;
 }
