@@ -70,40 +70,36 @@ std::string Solve2 (const std::string& value)
 
     for (int i=0; i<N; ++i)
     {
-        int count = 1;
-        if (value[i] == 'I')
-        {
-            while (i < N && value[i] == 'I')
-            {
-                ++count;
-                ++i;
-            }
+        char c = value[i];
 
+        int count = 1;
+        while (i < N && value[i] == c)
+        {
+            ++count;
+            ++i;
+        }
+
+        if (c == 'I')
+        {
             for (int j=0; j<count; ++j)
             {
                 ss << index + j;
             }
-            index = index + count;
         }
         else
         {
-            while (i < N && value[i] == 'D')
-            {
-                ++count;
-                ++i;
-            }
-
             for (int j=0; j<count; ++j)
             {
                 ss << index + count - 1 - j;
             }
-            index = index + count;
         }
+
+        index = index + count;
     }
+    
     std::cout << ss.str() << std::endl;
     return ss.str();
 }
-
 int main()
 {
     int T= 0;
