@@ -3,21 +3,38 @@
 #include <iostream>
 #include <vector>
 
-void Solve(const std::vector<int>& values, int N, int K)
-{
-    int count = 0;
-    for (int i=0; i<N-1; ++i)
+class Solution{   
+public:
+    int getPairsCount(int arr[], int n, int k) 
     {
-        for (int j=i+1; j<N; ++j)
+        std::unordered_map<int, int> results{};
+        for (int i=0; i<n; ++i)
         {
-            if (values[i] + values[j] == K)
+            ++results[arr[i]];
+        }
+        
+        int count = 0;
+        for (auto pair : results)
+        {
+            if (pair.first * 2 == k)
             {
-                ++count;
+                count = count + (pair.second * (pair.second-1) / 2);
+            }
+            else
+            {
+                auto find = results.find(k - pair.first);
+                if (find != results.end())
+                {
+                    if (pair.first < find->first)
+                    {
+                        count = count + (pair.second * find->second);    
+                    }
+                }    
             }
         }
+        return count;
     }
-    std::cout << count << std::endl;
-}
+};
 
 int main() 
 {
@@ -30,12 +47,13 @@ int main()
 	{
 	    std::cin >> N;
 	    std::cin >> K;
-	    std::vector<int> values(N);
+	    int values [N];
 	    for (int n=0; n<N; ++n)
 	    {
 	        std::cin >> values[n];
 	    }
-	    Solve(values, N, K);
+	    Solution solution{};
+	    std::cout << solution.getPairsCount(values, N, K) << std::endl;
 	}
 	return 0;
 }
