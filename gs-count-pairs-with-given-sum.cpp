@@ -47,13 +47,13 @@ int main()
 	{
 	    std::cin >> N;
 	    std::cin >> K;
-	    int values [N];
+	    std::vector<int> values(N);
 	    for (int n=0; n<N; ++n)
 	    {
 	        std::cin >> values[n];
 	    }
 	    Solution solution{};
-	    std::cout << solution.getPairsCount(values, N, K) << std::endl;
+	    std::cout << solution.getPairsCount(values.data(), N, K) << std::endl;
 	}
 	return 0;
 }
