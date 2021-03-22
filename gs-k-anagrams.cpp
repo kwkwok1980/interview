@@ -1,48 +1,72 @@
 //https://practice.geeksforgeeks.org/problems/k-anagrams-1/0
 
-#include <stack>
 #include <iostream>
 #include <vector>
-#include <queue>
-#include <map>
-#include <unordered_map>
 #include <algorithm>
+#include <set>
 #include <iterator>
+#include <unordered_map>
+#include <unordered_set>
 
-void Solve(const std::vector<std::string>& values)
+
+struct Anagram
 {
-    std::unordered_map<std::string, int> valuesMap{};
-    for (std::string value : values)
+   int keys[26];
+};
+
+struct Equal
+{
+    bool operator()(const Anagram& a1, const Anagram& a2) const
     {
-        std::sort(value.begin(), value.end());
-        ++valuesMap[value];
+        for(int i=0; i<26; ++i)
+        {
+            if (a1.keys[i] != a2.keys[i])
+            {
+                return false;
+            }
+        }
+        return true;
     }
+};
 
-    std::vector<int> counts{};
-    counts.reserve(valuesMap.size());
-    for (auto& pair : valuesMap)
+struct Hash
+{
+    unsigned int operator()(const Anagram& a) const
     {
-        counts.emplace_back(pair.second);
+        static std::hash<int> INT_HASH{};
+        unsigned int value = 31;
+        for (const auto& key : a.keys)
+        {
+            value |= INT_HASH(key);
+        }
+        return value;
     }
-    std::sort(counts.begin(), counts.end());
-    std::copy(counts.begin(), counts.end(), std::ostream_iterator<int>{std::cout, " "});
-    std::cout << std::endl;
-}
+};
 
-int main() {
+std::vector<std::vector<std::string>> Anagrams(std::vector<std::string>& string_list)
+{
+    std::vector<std::vector<std::string>> results{};
+    std::unordered_map<Anagram, int, Hash, Equal> anagramsMap{};
 
-  int N=0, T =0;
-  std::cin >> T;
-  for(int t=0; t<T; ++t)
-  {
-      std::cin >> N;
-      std::vector<std::string> values{};
-      for (int n=0; n<N; ++n)
-      {
-          std::string value{};
-          std::cin >> value;
-          values.emplace_back(value);
-      }
-      Solve(values);
-  }
+    for (const auto& string_value : string_list)
+    {
+        Anagram a{};
+        for (const auto &c : string_value)
+        {
+            ++a.keys[c - 'a'];
+        }
+
+        auto itFind = anagramsMap.find(a);
+        if (itFind != anagramsMap.end())
+        {
+            results[itFind->second].push_back(string_value);
+        }
+        else
+        {
+            results.emplace_back(std::vector<std::string>{string_value});
+            anagramsMap.emplace(a, results.size()-1);
+        }
+
+    }
+    return results;
 }
