@@ -12,8 +12,6 @@ struct Node
     }
 };
 
-*/
-
 void removeLoop(Node* head)
 {
     Node* first = head;
