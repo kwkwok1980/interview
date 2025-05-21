@@ -1,5 +1,3 @@
-// https://www.geeksforgeeks.org/problems/nodes-at-given-distance-in-binary-tree/1?page=4&company=Goldman%20Sachs&sortBy=difficulty
-
 /* A binary Tree node
 struct Node
 {
@@ -53,16 +51,18 @@ class Solution {
         }
         std::vector<int> results{};
         std::deque<Path*> distanceList{};
-        distanceList.push_back(pathMap[target]);
+        path = pathMap[target];
+        distanceList.push_back(path);
+        path->visited = true;
         while (!distanceList.empty()) {
             path = distanceList.front();
-            path->visited = true;
             if (path->distance < k) {
                 if (path->parent != -1) {
                     parent = pathMap[path->parent];
                     if (!parent->visited) {
                         parent->distance = path->distance + 1;
                         distanceList.push_back(parent);
+                        parent->visited = true;
                     }
                 }
                 if (path->left != -1) {
@@ -70,6 +70,7 @@ class Solution {
                     if (!left->visited) {
                         left->distance = path->distance + 1;
                         distanceList.push_back(left);
+                        left->visited = true;
                     }
                 }
                 if (path->right != -1) {
@@ -77,6 +78,7 @@ class Solution {
                     if (!right->visited) {
                         right->distance = path->distance + 1;
                         distanceList.push_back(right);
+                        right->visited = true;
                     }
                 }
             } else {
@@ -88,4 +90,3 @@ class Solution {
         return results;
     }
 };
-
