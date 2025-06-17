@@ -21,11 +21,6 @@ class Solution {
                 maxResults[i] = max;
             }
         }
-        
-        int result = std::numeric_limits<int>::min();
-        for (int i=0; i<N; ++i) {
-            result = std::max(result, maxResults[i]);
-        }
-        return result;
+        return *std::max_element(maxResults.begin(), maxResults.end());
     }
 };
