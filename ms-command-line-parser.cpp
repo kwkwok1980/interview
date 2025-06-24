@@ -13,6 +13,7 @@ Code, Compile, Run and Debug online from anywhere in world.
 #include <sstream>
 #include <iomanip>
 #include <any>
+#include <optional>
 
 struct Option {
     std::string name_;
@@ -40,40 +41,22 @@ struct CommandLineParser {
     }
 
     void parse(const std::string& commands) {
-        std::vector<std::string> inputParams{};
-        std::vector<std::string> inputValues{};
+        std::vector<std::string> inputs{};
         std::stringstream ss{};
-
-        auto handler = [&] {
-            std::string input = ss.str();
-            if (input[0] == '-') {
-                if (inputParams.size() != inputValues.size()) {
-                    inputValues.emplace_back("");
-                }
-                inputParams.emplace_back(input);
-            } else {
-                inputValues.emplace_back(input);
-            }
-            ss = std::stringstream{};
-        };
-
         for (char c : commands) {
             if (c != ' ') {
                 ss << c;
             } else {
-                handler();
+                inputs.emplace_back(ss.str());
+                ss = std::stringstream{};
             }
         }
 
         if (!ss.str().empty()) {
-            handler();
+            inputs.emplace_back(ss.str());
         }
 
-        if (inputParams.size() != inputValues.size()) {
-            inputValues.emplace_back("");
-        }
-
-        auto handler2 = []<typename T>(auto& o, auto& v, auto f) {
+        auto handler1 = []<typename T>(auto& o, auto& v, auto f) {
             T& param = *std::any_cast<T*>(o.param_);
             if (!v.empty()) {
                 param = f(v);
@@ -84,40 +67,45 @@ struct CommandLineParser {
             }
         };
 
-        auto handler3 = []<typename T>(auto& o) {
+        auto handler2 = []<typename T>(auto& o) {
             T& param = *std::any_cast<T*>(o.param_);
             param = std::any_cast<T>(o.value_);
         };
 
-        std::size_t N = inputParams.size();
+        std::size_t N = inputs.size();
         for (Option& option : optionList_) {
-            bool found = false;
-            for (std::size_t i=0; i<N; ++i) {
-                const std::string& inputParam = inputParams[i];
-                const std::string& inputValue = inputValues[i];
-                if (option.name_ == inputParam) {
-                    if (option.param_.type() == typeid(std::string*)) {
-                        handler2.operator()<std::string>(option, inputValue, [](auto s){return s;});
-                    } else if (option.param_.type() == typeid(int*)) {
-                        handler2.operator()<int>(option, inputValue, [](auto& s){return atoi(s.c_str());});
-                    } else if (option.param_.type() == typeid(double*)) {
-                        handler2.operator()<double>(option, inputValue, [](auto& s){return atof(s.c_str());});
-                    } else if (option.param_.type() == typeid(bool*)) {
-                        handler2.operator()<bool>(option, inputValue, [](auto& s){return s == "true";});
+            std::optional<std::string> inputParam{};
+            std::optional<std::string> inputValue{};
+            for (int i=0; i<N; ++i) {
+                if (inputs[i] == option.name_) {
+                    inputParam = inputs[i];
+                    if (i < N) {
+                        if (inputs[i + 1][0] != '-') {
+                            inputValue = inputs[i + 1];
+                        }
                     }
-                    found = true;
                     break;
                 }
             }
-            if (!found) {
+            if (inputParam && inputValue) {
                 if (option.param_.type() == typeid(std::string*)) {
-                    handler3.operator()<std::string>(option);
+                    handler1.operator()<std::string>(option, *inputValue, [](auto s){return s;});
                 } else if (option.param_.type() == typeid(int*)) {
-                    handler3.operator()<int>(option);
+                    handler1.operator()<int>(option, *inputValue, [](auto& s){return atoi(s.c_str());});
                 } else if (option.param_.type() == typeid(double*)) {
-                    handler3.operator()<double>(option);
+                    handler1.operator()<double>(option, *inputValue, [](auto& s){return atof(s.c_str());});
                 } else if (option.param_.type() == typeid(bool*)) {
-                    handler3.operator()<bool>(option);
+                    handler1.operator()<bool>(option, *inputValue, [](auto& s){return s == "true";});
+                }
+            } else {
+                if (option.param_.type() == typeid(std::string*)) {
+                    handler2.operator()<std::string>(option);
+                } else if (option.param_.type() == typeid(int*)) {
+                    handler2.operator()<int>(option);
+                } else if (option.param_.type() == typeid(double*)) {
+                    handler2.operator()<double>(option);
+                } else if (option.param_.type() == typeid(bool*)) {
+                    handler2.operator()<bool>(option);
                 }
             }
         }
