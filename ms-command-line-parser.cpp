@@ -79,7 +79,7 @@ struct CommandLineParser {
             for (int i=0; i<N; ++i) {
                 if (inputs[i] == option.name_) {
                     inputParam = inputs[i];
-                    if (i < N) {
+                    if (i < N-1) {
                         if (inputs[i + 1][0] != '-') {
                             inputValue = inputs[i + 1];
                         }
@@ -87,24 +87,29 @@ struct CommandLineParser {
                     break;
                 }
             }
-            if (inputParam && inputValue) {
-                if (option.param_.type() == typeid(std::string*)) {
+            if (option.param_.type() == typeid(std::string*)) {
+                if (inputParam && inputValue) {
                     handler1.operator()<std::string>(option, *inputValue, [](auto s){return s;});
-                } else if (option.param_.type() == typeid(int*)) {
-                    handler1.operator()<int>(option, *inputValue, [](auto& s){return atoi(s.c_str());});
-                } else if (option.param_.type() == typeid(double*)) {
-                    handler1.operator()<double>(option, *inputValue, [](auto& s){return atof(s.c_str());});
-                } else if (option.param_.type() == typeid(bool*)) {
-                    handler1.operator()<bool>(option, *inputValue, [](auto& s){return s == "true";});
-                }
-            } else {
-                if (option.param_.type() == typeid(std::string*)) {
+                } else {
                     handler2.operator()<std::string>(option);
-                } else if (option.param_.type() == typeid(int*)) {
+                }
+            } else if (option.param_.type() == typeid(int*)) {
+                if (inputParam && inputValue) {
+                    handler1.operator()<int>(option, *inputValue, [](auto& s){return atoi(s.c_str());});
+                } else {
                     handler2.operator()<int>(option);
-                } else if (option.param_.type() == typeid(double*)) {
+                }
+            } else if (option.param_.type() == typeid(double*)) {
+                if (inputParam && inputValue) {
+                    handler1.operator()<double>(option, *inputValue, [](auto& s){return atof(s.c_str());});
+                } else {
                     handler2.operator()<double>(option);
-                } else if (option.param_.type() == typeid(bool*)) {
+                }
+            } else if (option.param_.type() == typeid(bool*)) {
+                if (inputParam) {
+                    inputValue = inputValue ? *inputValue : std::string{"true"};
+                    handler1.operator()<bool>(option, *inputValue, [](auto& s){return s == "true";});
+                } else {
                     handler2.operator()<bool>(option);
                 }
             }
@@ -125,7 +130,7 @@ int main() {
     commandLineParser.add_option("--port", port);
     commandLineParser.add_option("--timeout", timeout, 5);
     commandLineParser.add_option("--verbose", verbose, false);
-    commandLineParser.parse("--ip 127.0.0.1 --port 12345 --verbose true");
+    commandLineParser.parse("--ip 127.0.0.1 --port 12345 --verbose");
     std::cout << timeout << std::endl;
     std::cout << ip << std::endl;
     std::cout << port << std::endl;
